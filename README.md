@@ -19,6 +19,8 @@ The placeHints method iterates through the entire Grid. At each Location, it cal
 The placeFlagAt method receives two integers that represent a row and column index. It checks if the index is legal and if the Location at that index is covered. Then it sets that Location's Type to FLAGGED. It also notifies its obervers with a String in the format "(row number):(column number):(action)". An example would be "4:5:flag". Similarly, the removeFlagAt method sets the specified FLAGGED Location's Type to COVERED.
 
 The uncoverAt method is a recursive method that uncovers the specified Location in the Grid. It receives two integers as an argument that represent a Location's index. If the specified Location is legal and is currently covered, then its type is set to UNCOVERED. It also notifies its observers if the specified Location has a mine. If it does not, then the method notifies its observers of the number of mines in the vicinity. Like the getNeighbors method, this method iterates through the surrounding Locations. During the loop, if the specified Location is legal, is not the given Location, and has no mine, then the uncoverAt method is recursively called for that Location. This method performs the opening of the board in Minesweeper.
+
+The getResult method determines the result of the game and returns a Result enum. It iterates through the entire Grid. If any Locations that are uncovered contain a mine, then the Result enum is set to LOSE. If the number of uncovered Locations equals the number of non-mine Locations, then the Result enum is set to WIN. Otherwise, the Result enum is set to NONE.
 ## Ticker
 The Ticker class extends JLabel and implements ActionListener. It contains a Timer called timer, an integer called seconds, and a boolean called running. This class simply represents a timer that is displayed in the game window. It updates its seconds in the JLabel text.
 ## Minesweeper
@@ -26,4 +28,14 @@ The Minesweeper class extends JPanel and implements MouseListener and Observer. 
 
 The contructor receives a width integer, a height integer, and a mines integer as arguments. Since it extends JPanel, it creates a GridLayout to keep the GUI organized. The constructor then instantiates the Grid object and adds the Minesweeper object as an observer. It sets the number of flags to the given number of mines. It adds a JLabel with the text "Flags" and adds the flagLabel instantiated with the number of flags next to it. Similarly, it adds a JLabel for the time and adds the Ticker object next to it.
 
-The constructor then instantiates the 2D array of JLabels called tile with the given height and width integers. Then it iterates through the array. It adds a MouseListener for each JLabel in the array.
+The constructor then instantiates the 2D array of JLabels called tile with the given height and width integers. Then it iterates through the array. It adds a MouseListener for each JLabel in the array, among other preparations. This allows the user to interact with the JLabels as buttons that can be pressed in more than one way.
+
+The mouseClicked method handles the actions performed after a JLabel is clicked. It locates the JLabel in the tile array that was clicked using the findSourceIndex method. Using the index of the JLabel, it performs actions on the corresponding Location in the Grid object. If it is a left click, then it uncovers the specified Location. If it is a right click, then it places or removes a flag at the Location.
+
+After the Grid object is modified, it notifies the Minesweeper object of the changes since it is an oberver. The update method handles the receiving of the message String given by the Observable object. It parses the String using the colon as a delimiter. The JLabel to be updated is determined by the index given in the message. If the message contains the word mine, then the corresponding JLabel is set to the Mine ImageIcon. If it contains flag, then the JLabel is set to the Flag ImageIcon. If it contains unflag, then the Flag ImageIcon is removed from the JLabel. Lastly, if it contains a number representing the hint, then the JLabel text is set to that number.
+
+The update method also calls the getResult method of Grid to determine the state of the game. A dialog box is created displaying the result if the game is over, and closing the dialog box closes the program.
+## Main
+The Main class simply instantiates the objects. It also creates a JFrame to hold the Minesweeper object since it extends JPanel. In addition, it allows the user to enter the parameters for the board size if the program is run in the command prompt.
+# Conclusion
+The program is separated into several classes, each with a unique task. Using various tools such as MouseListener and the Observer pattern, I was able to recreate the Minesweeper game in Java.
