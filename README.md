@@ -34,7 +34,7 @@ The mouseClicked method handles the actions performed after a JLabel is clicked.
 
 After the Grid object is modified, it notifies the Minesweeper object of the changes since it is an oberver. The update method handles the receiving of the message String given by the Observable object. It parses the String using the colon as a delimiter. The JLabel to be updated is determined by the index given in the message. If the message contains the word mine, then the corresponding JLabel is set to the Mine ImageIcon. If it contains flag, then the JLabel is set to the Flag ImageIcon. If it contains unflag, then the Flag ImageIcon is removed from the JLabel. Lastly, if it contains a number representing the hint, then the JLabel text is set to that number.
 
-The update method also calls the getResult method of Grid to determine the state of the game. A dialog box is created displaying the result if the game is over, and closing the dialog box closes the program.
+The update method also calls the getResult method of Grid to determine the state of the game. A dialog box is created displaying the result if the game is over. Closing the dialog box closes the program.
 ## Main
 The Main class simply instantiates the objects. It also creates a JFrame to hold the Minesweeper object since it extends JPanel. In addition, it allows the user to enter the parameters for the board size if the program is run in the command prompt.
 # Conclusion
